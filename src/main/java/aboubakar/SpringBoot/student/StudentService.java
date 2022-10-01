@@ -3,15 +3,13 @@ package aboubakar.SpringBoot.student;
 import org.hibernate.boot.model.naming.IllegalIdentifierException;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.Month;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class StudentService {
 
-    private StudentRepository studentRepository;
+    private final StudentRepository studentRepository;
 
     public StudentService(StudentRepository studentRepository) {
         this.studentRepository = studentRepository;
@@ -22,7 +20,7 @@ public class StudentService {
     public void addStudent(Student student){
         Optional<Student> studentOptional = studentRepository.findStudentByEmail(student.getEmail());
         if(studentOptional.isPresent()){
-            throw new IllegalStateException("This email "+student.getEmail()+" is not aivalble");
+            throw new IllegalStateException("This email "+student.getEmail()+" is not available");
         }
         studentRepository.save(student);
     }
@@ -35,6 +33,8 @@ public class StudentService {
         studentRepository.deleteById(studentId);
     }
 
+    //TODO: verify if the new email is available
+    //TODO: verify if the new name/email and actual name/email are not the same before saving.
     public void updateStudent(Student student, Long id){
         Optional<Student> optionalStudent = studentRepository.findById(id);
         if(optionalStudent.isEmpty()){
